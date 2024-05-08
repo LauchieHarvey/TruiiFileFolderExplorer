@@ -1,0 +1,8 @@
+
+# Frontend
+./frontend/node_modules
+
+# Backend
+backend/wwwroot/*
+backend/obj
+backend/bin
