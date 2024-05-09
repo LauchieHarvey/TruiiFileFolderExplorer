@@ -3,7 +3,7 @@ const App = () => {
 
   return (
     <>
-      <p>React + ASP.NET Hello World</p>
+      <p>hellooooo!!!</p>
     </>
   )
 }
