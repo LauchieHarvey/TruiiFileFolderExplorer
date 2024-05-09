@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-[Route("api/test")]
+[Route("api/[controller]")]
 [ApiController]
 public class TestController : ControllerBase
 {
