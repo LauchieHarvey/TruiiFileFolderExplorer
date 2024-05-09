@@ -1,18 +1,20 @@
 name: tfe
 
-
 services:
   frontend:
     build: ./frontend
-    volume:
-      - ./frontend/dist:/app/dist
 
   backend:
     build:
       context: .
       dockerfile: ./backend/Dockerfile
     ports: 
-      - "8080:8080"
+      - "80:8080"
 
-#  db:
-#    image: postgres
+  db:
+    build: ./db
+
+  adminer:
+    image: adminer:latest
+    ports:
+      - "8001:8080"
