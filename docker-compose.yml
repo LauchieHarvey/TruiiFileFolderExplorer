@@ -13,8 +13,11 @@ services:
 
   db:
     build: ./db
+    expose:
+      - "5432:5432"
 
   adminer:
     image: adminer:latest
     ports:
       - "8001:8080"
+

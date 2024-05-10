@@ -13,5 +13,8 @@ app.UseRouting();
 
 app.MapDefaultControllerRoute();
 
+// Setup and configure the DB before running the http server.
+var db = new DatabaseManager();
+
 // Run the server.
 app.Run();
