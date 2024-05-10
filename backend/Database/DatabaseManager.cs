@@ -10,6 +10,11 @@ public class DatabaseManager
       Configure();
     }
 
+    public NpgsqlConnection GetNpgsqlConnection()
+    {
+      return _connection;
+    }
+
     /// <summary>
     /// Configure the Database. Create DB tables.
     /// </summary>
@@ -32,8 +37,8 @@ public class DatabaseManager
       {
         // Define SQL commands to create tables
         List<string> commands = new List<string> {
-          "CREATE TABLE IF NOT EXISTS Table1 (ID SERIAL PRIMARY KEY, Name VARCHAR(50));",
-          "CREATE TABLE IF NOT EXISTS Table2 (ID SERIAL PRIMARY KEY, Age INT);"
+          "CREATE TABLE IF NOT EXISTS Table1 (id SERIAL PRIMARY KEY, name VARCHAR(50));",
+          "CREATE TABLE IF NOT EXISTS Table2 (id SERIAL PRIMARY KEY, age INT);"
         };
 
         foreach (var command in commands)
