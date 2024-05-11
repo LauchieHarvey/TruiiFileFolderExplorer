@@ -89,8 +89,11 @@ public class FolderController : ControllerBase
             return BadRequest("folder name must be a string. Parent Id must be a number.");
         }
 
-        await using (var cmd = new NpgsqlCommand("INSERT INTO folders (name, parentId) VALUES ('folderA', 1)", _db))
+        await using (var cmd = new NpgsqlCommand("INSERT INTO folders (name, parentId) VALUES (@name, @parentId)", _db))
         {
+            cmd.Parameters.AddWithValue("@name", name);
+            cmd.Parameters.AddWithValue("@parentId", parentId);
+
             await cmd.ExecuteNonQueryAsync();
         }
 

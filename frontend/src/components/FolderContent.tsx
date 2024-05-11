@@ -1,7 +1,12 @@
+import { useSelector } from "react-redux";
 import { useGetFoldersQuery } from "../state/api";
+import { selectCurrentFolder } from "../state/folderSlice";
 
 const FolderContent = () => {
-  const {data, isFetching, isError} = useGetFoldersQuery(1);
+  const currentFolder = useSelector(selectCurrentFolder);
+  console.log(`Current folder content id: ${currentFolder}`);
+  const {data, isFetching, isError} = useGetFoldersQuery(currentFolder);
+
   if (isError || data == undefined) {
     return <p>Failed to load folder content.</p>;
   }
@@ -12,11 +17,10 @@ const FolderContent = () => {
 
   return (
     <div>
-      <p>Folder Content</p>
+      <h3>Folder Content</h3>
       {data.map((child) => (
         <ListItem key={child.name} name={child.name} type={child.type}/>
       ))}
-
     </div>
   )
 }

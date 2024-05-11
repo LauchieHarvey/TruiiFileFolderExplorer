@@ -1,11 +1,14 @@
 import { useState } from "react";
+import { useGetFoldersQuery } from "../state/api";
+import { ROOT_FOLDER_ID, folderActions } from "../state/folderSlice";
+import { useDispatch } from "react-redux";
 
 const FolderTree = () => {
   return (
     <div>
-      <p>FOLDER TREE</p>
+      <h3>Folder Tree</h3>
       <ul>
-        <Folder name="root" id={1}/>
+        <Folder name="root" id={ROOT_FOLDER_ID}/>
       </ul>
     </div>
   )
@@ -19,25 +22,30 @@ interface FolderProps {
 
 const Folder = ({name, id}: FolderProps) => {
   const [open, setOpen] = useState<boolean>(false);
+  const dispatch = useDispatch();
 
-  const children = id === 1 ? [{id: 5, name: 'folder child', type: 'folder'}, {id: 3, name: 'file child :)', type: 'file'}] : [];// useGetChildrenQuery(id);
+  const {data, isError, isFetching} = useGetFoldersQuery(id);
 
-  const toggleVisibility = () => {
+  const handleFolderClick = () => {
     setOpen(!open);
+    dispatch(folderActions.setCurrentFolder(id));
   }
 
+  const showChildren = open && !isError && !isFetching && data != undefined;
+  const canToggleOpen = data !== undefined && data.length > 0;
+
+  let nameDisplay = isError ? `${name} - failed to load!` : name;
   return (
     <li>
-      <p onClick={toggleVisibility}>{name}</p>
-      {open && (
+      <p onClick={handleFolderClick} >{nameDisplay}</p>
+      {showChildren && (
         <ul>
-          {children.filter((child) => child.type === 'folder').map((child) => (
+          {data.filter((child) => child.type === 'folder').map((child) => (
               <Folder name={child.name} id={child.id}/>
           ))}
         </ul>
       )}
     </li>
-
   );
 }
 

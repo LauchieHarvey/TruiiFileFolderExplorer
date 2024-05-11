@@ -7,11 +7,17 @@ const baseQuery = fetchBaseQuery({ baseUrl: '/api' });
 export const api = createApi({
   reducerPath: 'api',
   baseQuery,
+  tagTypes: ["folders"],
   endpoints: (builder) => ({
     getFolders: builder.query<Array<{id: number, name: string, parentId: number, type: 'folder' | 'file'}>, number>({
       query: (id) => ({url: `/folder?parentId=${id}`}),
+      providesTags: ["folders"]
     }),
+    addFolder: builder.mutation<void, {parentId: number, name: string}>({
+      query: (args) => ({url: '/folder', method: 'POST', body: args}),
+      invalidatesTags: ["folders"],
+    })
   }),
 });
 
-export const { useGetFoldersQuery } = api;
+export const { useGetFoldersQuery, useAddFolderMutation } = api;
