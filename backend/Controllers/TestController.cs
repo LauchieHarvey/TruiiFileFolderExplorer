@@ -16,7 +16,7 @@ public class TestController : ControllerBase
     public async Task<IActionResult> Get()
     {
         var data = new List<Object>();
-        await using (var cmd = new NpgsqlCommand("SELECT * FROM table1;", _db))
+        await using (var cmd = new NpgsqlCommand("SELECT * FROM folders;", _db))
         {
             await using var reader = await cmd.ExecuteReaderAsync();
 

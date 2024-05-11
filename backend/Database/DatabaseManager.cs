@@ -32,15 +32,16 @@ public class DatabaseManager
         return false;
       }
 
-      // Setup DB Schema.
       try
       {
-        // Define SQL commands to create tables
+        // Define SQL commands to initialise database.
         List<string> commands = new List<string> {
-          "CREATE TABLE IF NOT EXISTS Table1 (id SERIAL PRIMARY KEY, name VARCHAR(50));",
-          "CREATE TABLE IF NOT EXISTS Table2 (id SERIAL PRIMARY KEY, age INT);"
+          "CREATE TABLE IF NOT EXISTS folders (id SERIAL PRIMARY KEY, name VARCHAR(32) UNIQUE, parentId INTEGER REFERENCES folders (id));",
+          "CREATE TABLE IF NOT EXISTS files (id SERIAL PRIMARY KEY, name VARCHAR(32) UNIQUE, parentId INTEGER REFERENCES folders (id), file BYTEA);",
+          "INSERT INTO folders (name, parentId) VALUES ('root', NULL);"
         };
 
+        // Run each command one by one.
         foreach (var command in commands)
         {
           using (var cmd = new NpgsqlCommand(command, _connection))

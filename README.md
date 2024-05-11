@@ -32,8 +32,20 @@ I am still debating whether I made the right call to have the React code in a se
 
 I'm quite familiar with docker and docker-compose, but it's the first time I've created a docker-compose.yml file from scratch by myself. It is a good learning experience. I'm also seizing the opportunity to experiment with [Bun](https://bun.sh).
 
+... time elapses ...
+
+I am starting to plan and implement the database.  
+I was mentally preparing for a more difficult schema but after reading the specification more carefully it seems relatively straightforward.  
+I believe it can be done with just two simple tables. One for folders and one for files. I'm contemplating normalising this schema to include the concept of a heirarchical node. At the moment I believe that would add more complexity than necessary without much benefit.   
+I would expect that a file storage cloud service like AWS's S3 buckets would be better suited to file storage than PostgreSQL. If I were building this for commercial purposes I'd read more about that option before diving into Postgres file storage.
+
+Inside the docker-compose.yml file I've added adminer so that I can graphically inspect the datbase to ensure I'm setting it up properly. This will also help me with debugging and manual testing.
+
 
 ## Database Schema
+
+Folders: *id*, name, parentId
+Files: *id*, name, parentId, fileData
 
 ## User Guide
 
