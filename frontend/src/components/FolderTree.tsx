@@ -22,7 +22,7 @@ const Folder = ({name, id}: FolderProps) => {
 
   const children = id === 1 ? [{id: 5, name: 'folder child', type: 'folder'}, {id: 3, name: 'file child :)', type: 'file'}] : [];// useGetChildrenQuery(id);
 
-  const toggleVisibility = (e: React.MouseEvent<HTMLElement>) => {
+  const toggleVisibility = () => {
     setOpen(!open);
   }
 
@@ -31,11 +31,9 @@ const Folder = ({name, id}: FolderProps) => {
       <p onClick={toggleVisibility}>{name}</p>
       {open && (
         <ul>
-          {children.map((child) => {
-            if (child.type === 'folder')
-              return <Folder name={child.name} id={child.id}/>;
-            else return <li>{child.name}</li>
-          })}
+          {children.filter((child) => child.type === 'folder').map((child) => (
+              <Folder name={child.name} id={child.id}/>
+          ))}
         </ul>
       )}
     </li>

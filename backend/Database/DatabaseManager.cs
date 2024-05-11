@@ -39,7 +39,7 @@ public class DatabaseManager
           @"CREATE TABLE IF NOT EXISTS folders (
             id SERIAL PRIMARY KEY,
             name VARCHAR(32) UNIQUE NOT NULL,
-            parentId INTEGER NOT NULL REFERENCES folders (id)
+            parentId INTEGER REFERENCES folders (id)
           );",
           @"CREATE TABLE IF NOT EXISTS files (
             id SERIAL PRIMARY KEY,
