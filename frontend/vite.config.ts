@@ -7,4 +7,8 @@ export default defineConfig({
   /*build: {
     outDir: '../backend/wwwroot/' // Place it nicely for ASP.NET
   }*/
+  server: {
+    port: 4009, // Forwarded in devcontainer.json runArgs.
+    host: true
+  }
 })
