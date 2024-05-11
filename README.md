@@ -44,7 +44,7 @@ Inside the docker-compose.yml file I've added adminer so that I can graphically 
 
 ## Database Schema
 
-Folders: *id*, name, parentId
+Folders: *id*, name, parentId  
 Files: *id*, name, parentId, fileData
 
 ## User Guide
