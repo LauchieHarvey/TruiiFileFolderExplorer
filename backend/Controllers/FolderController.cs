@@ -1,3 +1,4 @@
+using System.Text.Json.Nodes;
 using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 
@@ -56,5 +57,43 @@ public class FolderController : ControllerBase
             }
         }
         return Ok(data);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Post([FromBody] JsonObject requestBody)
+    {
+        if (requestBody == null)
+        {
+            // Handle null request body, e.g., return BadRequest
+            return BadRequest("Request body is null.");
+        }
+
+        if (
+            !requestBody.TryGetPropertyValue("name", out var nameToken) ||
+            !requestBody.TryGetPropertyValue("parentId", out var parentIdToken)
+        )
+        {
+            return BadRequest("Name or parentId is missing in the request body.");
+        }
+
+        String name;
+        int parentId;
+        try
+        {
+            name = nameToken!.GetValue<string>();
+            parentId = parentIdToken!.GetValue<int>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in Folder POST handler: {ex.Message}");
+            return BadRequest("folder name must be a string. Parent Id must be a number.");
+        }
+
+        await using (var cmd = new NpgsqlCommand("INSERT INTO folders (name, parentId) VALUES ('folderA', 1)", _db))
+        {
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        return Ok();
     }
 }
