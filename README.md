@@ -58,6 +58,7 @@ Files: *id*, name, parentId, fileData
 ## User Guide
 
 ### System Limitations
+Maximum filesize is 100MB.
 
 ## Future Development Plans
 
