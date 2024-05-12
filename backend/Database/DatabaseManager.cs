@@ -2,38 +2,30 @@ using Npgsql;
 
 public class DatabaseManager
 {
-    private NpgsqlConnection _connection;
+    private string _connectionString;
     public DatabaseManager()
     {
-      var connectionString = "Host=db;Username=truii;Password=truii;Database=tfedb";
-      _connection = new NpgsqlConnection(connectionString);
-      Configure();
+      _connectionString = "Host=db;Username=truii;Password=truii;Database=tfedb";
     }
 
-    public NpgsqlConnection GetNpgsqlConnection()
+    public async Task<NpgsqlConnection> GetNpgsqlConnection()
     {
-      return _connection;
+      var connection = new NpgsqlConnection(_connectionString);
+      await connection.OpenAsync();
+      return connection;
     }
 
     /// <summary>
     /// Configure the Database. Create DB tables.
     /// </summary>
     /// <returns>True on success, false on failure.</returns>
-    private Boolean Configure()
+    public async Task<Boolean> Configure()
     {
-      // Connect to the DB.
       try
       {
-        _connection.Open();
-      }
-      catch (Exception ex)
-      {
-        Console.WriteLine($"Error connecting to the Database, make sure it's running. {ex.Message}");
-        return false;
-      }
+        // Connect to the DB.
+        NpgsqlConnection connection = await GetNpgsqlConnection();
 
-      try
-      {
         // Define SQL commands to initialise database.
         List<string> commands = new List<string> {
           @"CREATE TABLE IF NOT EXISTS folders (
@@ -50,12 +42,15 @@ public class DatabaseManager
           "INSERT INTO folders (name, parentId) VALUES ('root', NULL);"
         };
 
-        // Run each command one by one.
-        foreach (var command in commands)
+        await using (connection)
         {
-          using (var cmd = new NpgsqlCommand(command, _connection))
+          // Run each command one by one.
+          foreach (var command in commands)
           {
-            cmd.ExecuteNonQuery();
+            using (var cmd = new NpgsqlCommand(command, connection))
+            {
+              cmd.ExecuteNonQuery();
+            }
           }
         }
       }

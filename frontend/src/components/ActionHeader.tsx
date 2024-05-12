@@ -28,18 +28,24 @@ const ActionHeader = () => {
   }
 
   return (
-    <div>
+    <div className="flex flex-row">
       <input
         type="file"
         onChange={handleFileUpload}
         accept=".geojson, .csv">
       </input>
-      <form onSubmit={handleCreateFolder}>
-        <button type="submit" disabled={folderName == ""}>Create Folder</button>
+      <form onSubmit={handleCreateFolder} className="flex flex-row gap-2">
+        <button
+          type="submit"
+          disabled={folderName == ""}
+          className="p-1 bg-slate-200 hover:enabled:bg-slate-300 border-2 disabled:opacity-70">
+          Create Folder
+        </button>
         <input
           type="text"
           value={folderName}
-          onChange={(e) => setFolderName(e.target.value)}>
+          onChange={(e) => setFolderName(e.target.value)}
+          className="border-2">
         </input>
       </form>
     </div>

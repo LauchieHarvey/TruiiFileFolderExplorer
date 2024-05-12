@@ -37,9 +37,11 @@ const Folder = ({name, id}: FolderProps) => {
   let nameDisplay = isError ? `${name} - failed to load!` : name;
   return (
     <li>
-      <p onClick={handleFolderClick} >{nameDisplay}</p>
+      <p
+        onClick={handleFolderClick}
+        className={`hover:${canToggleOpen ? 'cursor-pointer' : undefined}`}>{nameDisplay}</p>
       {showChildren && (
-        <ul>
+        <ul className="ml-2">
           {data.filter((child) => child.type === 'folder').map((child) => (
               <Folder name={child.name} id={child.id}/>
           ))}

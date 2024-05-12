@@ -6,13 +6,15 @@ import ActionHeader from "./components/ActionHeader";
 
 const App = () => {
   return (
-    <div>
-      <Provider store={store}>
+    <Provider store={store}>
+      <div className="flex flex-col gap-10">
         <ActionHeader />
-        <FolderTree />
-        <FolderContent />
-      </Provider>
-    </div>
+        <div className="flex flex-row gap-40">
+          <FolderTree />
+          <FolderContent />
+        </div>
+      </div>
+    </Provider>
   )
 }
 

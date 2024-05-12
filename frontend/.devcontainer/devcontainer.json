@@ -1,4 +1,11 @@
 {
         "image": "oven/bun:latest",
-        "runArgs": ["-p", "4009:4009"]
+        "runArgs": ["-p", "4009:4009"],
+        "customizations": {
+                "vscode": {
+                        "extensions": [
+                                "bradlc.vscode-tailwindcss"
+                        ]
+                }
+        }
 }

@@ -6,11 +6,11 @@ using Npgsql;
 [ApiController]
 public class FolderController : ControllerBase
 {
-    private readonly NpgsqlConnection _db;
+    private readonly DatabaseManager _db;
 
     public FolderController(DatabaseManager db)
     {
-        _db = db.GetNpgsqlConnection();
+        _db = db;
     }
 
     /// <summary>
@@ -32,6 +32,8 @@ public class FolderController : ControllerBase
         {
             return BadRequest("parentId parameter must be a number.");
         }
+        // Request a DB connection.
+        var connection = await _db.GetNpgsqlConnection();
 
         var data = new List<Object>();
         var query = @"
@@ -39,21 +41,24 @@ public class FolderController : ControllerBase
             UNION
             SELECT id, name, parentId, 'file' as type FROM files WHERE parentId = @parentId;
         ";
-        await using (var cmd = new NpgsqlCommand(query, _db))
+        await using (connection)
         {
-            cmd.Parameters.AddWithValue("@parentId", parentId);
-
-            await using var reader = await cmd.ExecuteReaderAsync();
-
-            while (await reader.ReadAsync())
+            using (var cmd = new NpgsqlCommand(query, connection))
             {
-                var rowData = new {
-                    id = reader["id"],
-                    name = reader["name"],
-                    parentId = reader["parentId"],
-                    type = reader["type"],
-                };
-                data.Add(rowData);
+                cmd.Parameters.AddWithValue("@parentId", parentId);
+
+                await using var reader = await cmd.ExecuteReaderAsync();
+
+                while (await reader.ReadAsync())
+                {
+                    var rowData = new {
+                        id = reader["id"],
+                        name = reader["name"],
+                        parentId = reader["parentId"],
+                        type = reader["type"],
+                    };
+                    data.Add(rowData);
+                }
             }
         }
         return Ok(data);
@@ -89,12 +94,25 @@ public class FolderController : ControllerBase
             return BadRequest("folder name must be a string. Parent Id must be a number.");
         }
 
-        await using (var cmd = new NpgsqlCommand("INSERT INTO folders (name, parentId) VALUES (@name, @parentId)", _db))
-        {
-            cmd.Parameters.AddWithValue("@name", name);
-            cmd.Parameters.AddWithValue("@parentId", parentId);
+        var connection = await _db.GetNpgsqlConnection();
 
-            await cmd.ExecuteNonQueryAsync();
+        try
+        {
+            await using (connection)
+            {
+                using ( var cmd = new NpgsqlCommand("INSERT INTO folders (name, parentId) VALUES (@name, @parentId)", connection))
+                {
+                    cmd.Parameters.AddWithValue("@name", name);
+                    cmd.Parameters.AddWithValue("@parentId", parentId);
+
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed when inserting folder into folders table. {ex}");
+            return BadRequest("Server error when Adding folder.");
         }
 
         return Ok();

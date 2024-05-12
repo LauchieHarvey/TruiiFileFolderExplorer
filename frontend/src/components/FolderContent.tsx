@@ -4,7 +4,6 @@ import { selectCurrentFolder } from "../state/folderSlice";
 
 const FolderContent = () => {
   const currentFolder = useSelector(selectCurrentFolder);
-  console.log(`Current folder content id: ${currentFolder}`);
   const {data, isFetching, isError} = useGetFoldersQuery(currentFolder);
 
   if (isError || data == undefined) {
@@ -17,7 +16,7 @@ const FolderContent = () => {
 
   return (
     <div>
-      <h3>Folder Content</h3>
+      <h3 className="text-xl">Folder Content</h3>
       {data.map((child) => (
         <ListItem key={child.name} name={child.name} type={child.type}/>
       ))}
