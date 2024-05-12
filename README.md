@@ -41,6 +41,14 @@ I would expect that a file storage cloud service like AWS's S3 buckets would be 
 
 Inside the docker-compose.yml file I've added adminer so that I can graphically inspect the datbase to ensure I'm setting it up properly. This will also help me with debugging and manual testing.
 
+... time elapses ...
+
+While I have 3 days remaining in the project I will be working on all of them so I don't have much actual time left.  
+Good thing it's almost done. The main feature left to implement is file uploading. The DB is set up for it. I just need to implement the ASP.NET API to support it & hook that up to React. I'm sure the React part of that will be easy. I'm less sure about the ASP.NET part.  
+
+I've been enjoying using TailwindCSS and Bun so far. I think I'll be incoorporating both of those in my personal projects going forward.
+
+Additionally I will need to make the User Guide. I'm hoping that my Docker setup will make that fairly straightforward.
 
 ## Database Schema
 
