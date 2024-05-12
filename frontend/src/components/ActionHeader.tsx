@@ -2,6 +2,7 @@ import { useState } from "react";
 import { selectCurrentFolder } from "../state/folderSlice";
 import { useSelector } from "react-redux";
 import { useAddFolderMutation } from "../state/api";
+import { ClosedFolderIcon } from "./Icons";
 
 const ActionHeader = () => {
   const currentFolder = useSelector(selectCurrentFolder);
@@ -19,9 +20,11 @@ const ActionHeader = () => {
     if (folderName == "")
       return;
     try {
-      const a = await addFolder({parentId: currentFolder, name: folderName});
+      const a = await addFolder({parentId: currentFolder.id, name: folderName});
       if (a.error)
         console.error(a.error);
+      else
+        setFolderName("");
     } catch (error) {
       console.error("Failed when requesting to create folder", error);
     }
@@ -38,14 +41,15 @@ const ActionHeader = () => {
         <button
           type="submit"
           disabled={folderName == ""}
-          className="p-1 bg-slate-200 hover:enabled:bg-slate-300 border-2 disabled:opacity-70">
-          Create Folder
+          className="p-1 bg-slate-300 hover:enabled:bg-slate-400 rounded-md disabled:opacity-70">
+          <div className="flex flex-row align-middle gap-2"><ClosedFolderIcon/>Create Folder</div>
         </button>
         <input
           type="text"
           value={folderName}
           onChange={(e) => setFolderName(e.target.value)}
-          className="border-2">
+          className="border-2 rounded-md"
+          placeholder="Folder A">
         </input>
       </form>
     </div>
