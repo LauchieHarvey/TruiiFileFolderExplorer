@@ -1,6 +1,8 @@
 import { useSelector } from "react-redux";
 import { selectCurrentFile } from "../state/folderSlice";
 import { useGetFileQuery } from "../state/api";
+import { TileLayer, MapContainer, GeoJSON } from "react-leaflet";
+import { LatLngExpression } from "leaflet";
 
 
 const FilePreview = () => {
@@ -35,9 +37,6 @@ const FilePreview = () => {
     );
   }
 
-  console.log("data:", data);
-  console.log("file:", data.file);
-  console.log(`filename: ${data.name}`);
   if (data.name.endsWith(".geojson")) {
     return <GeojsonPreview file={data.file} name={data.name}/>
   } else if (data.name.endsWith(".csv")) {
@@ -51,8 +50,18 @@ interface PreviewProps {
   name: string;
 }
 
-const GeojsonPreview = ({file, name}: PreviewProps) => {
-  return <UnsupportedFilePreview file={file} name={name}/>
+const GeojsonPreview = ({file}: PreviewProps) => {
+  const geoData = JSON.parse(file);
+  const australiaLatLong: LatLngExpression = [-25.27, 133.78];
+
+  return (
+    <MapContainer center={australiaLatLong} zoom={4} scrollWheelZoom={false} className="h-[600px]">
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
+      <GeoJSON data={geoData}/>
+    </MapContainer>
+  );
 }
 
 const CsvPreview = ({file, name}: PreviewProps) => {
