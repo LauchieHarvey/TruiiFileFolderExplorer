@@ -50,6 +50,12 @@ I've been enjoying using TailwindCSS and Bun so far. I think I'll be incoorporat
 
 Additionally I will need to make the User Guide. I'm hoping that my Docker setup will make that fairly straightforward.
 
+... time elapses ...
+
+File uploads now work! That's all of the essential features done :)
+
+I'm considering adding leaflet to visualise the geojson.
+
 ## Database Schema
 
 Folders: *id*, name, parentId  
