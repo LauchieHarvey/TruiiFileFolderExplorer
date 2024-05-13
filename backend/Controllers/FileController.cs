@@ -41,25 +41,25 @@ public class FileController : ControllerBase
         var query = @"SELECT id, name, parentId, file FROM files WHERE id = @id";
         await using (connection)
         {
-            using (var cmd = new NpgsqlCommand(query, connection))
-            {
-                cmd.Parameters.AddWithValue("@id", id);
+          using (var cmd = new NpgsqlCommand(query, connection))
+          {
+              cmd.Parameters.AddWithValue("@id", id);
 
-                await using var reader = await cmd.ExecuteReaderAsync();
+              await using var reader = await cmd.ExecuteReaderAsync();
 
-                while (await reader.ReadAsync())
-                {
-                    var rowData = new {
-                        id = reader["id"],
-                        name = reader["name"],
-                        parentId = reader["parentId"],
-                        type = reader["type"],
-                    };
-                    return Ok(rowData);
-                }
-            }
+              while (await reader.ReadAsync())
+              {
+                var rowData = new {
+                    id = reader["id"],
+                    name = reader["name"],
+                    parentId = reader["parentId"],
+                    file = reader["file"],
+                };
+                return Ok(rowData);
+              }
+          }
         }
-        return BadRequest("Couldn't find the file.");
+        return NotFound();
     }
 
     [HttpPost]
@@ -113,7 +113,7 @@ public class FileController : ControllerBase
         catch (Exception ex)
         {
           Console.WriteLine($"Failed when inserting file into files table. {ex}");
-          return BadRequest("Server error when Adding file.");
+          return Problem("Server error when Adding file.");
         }
 
         return Ok();
