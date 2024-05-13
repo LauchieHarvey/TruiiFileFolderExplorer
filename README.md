@@ -70,7 +70,7 @@ If you'd like to inspect the DB when the containers are running, visit [adminer]
 
 ## User Guide
 
-WARNING: The UI won't work yet, I am yet to add and push the frontend dist/ directory. I wouldn't normally do this but it'll save you a complicated dev environment set up.
+WARNING: I have not tested this yet. I'll check that it works before COB Wednesday.
 
 I have containerized this project using docker. The steps to get the project running are as follows:  
 1. Make sure docker is installed.
