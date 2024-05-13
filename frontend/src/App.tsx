@@ -3,6 +3,7 @@ import FolderContent from "./components/FolderContent";
 import FolderTree from "./components/FolderTree";
 import { store } from "./state/store";
 import ActionHeader from "./components/ActionHeader";
+import FilePreview from "./components/FilePreview";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
           <FolderTree />
           <FolderContent />
         </div>
+        <FilePreview/>
       </div>
     </Provider>
   )

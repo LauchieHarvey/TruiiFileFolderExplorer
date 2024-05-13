@@ -17,6 +17,19 @@ export const api = createApi({
       query: (args) => ({url: '/folder', method: 'POST', body: args}),
       invalidatesTags: ["folders"],
     }),
+    getFile: builder.query<{id: number, name: string, parentId: number, file: string}, number>({
+      queryFn: async (id) => {
+        try {
+          const res = await fetch(`/api/file?id=${id}`);
+          const data = await res.json();
+          // Convert file data from base64 to ascii/utf-8.
+          return {data: {id: data.id, name: data.name, parentId: data.parentId, file: atob(data.file)}};
+        } catch (error) {
+          console.error(error);
+          return {error: {status: 500, data: undefined}};
+        }
+      }
+    }),
     addFile: builder.mutation<void, {parentId: number, file: File}>({
       query: (args) => {
         const formData = new FormData();
@@ -33,4 +46,4 @@ export const api = createApi({
   }),
 });
 
-export const { useGetFoldersQuery, useAddFolderMutation, useAddFileMutation } = api;
+export const { useGetFoldersQuery, useAddFolderMutation, useAddFileMutation, useGetFileQuery } = api;
