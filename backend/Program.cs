@@ -9,6 +9,7 @@ var app = builder.Build();
 
 // Setup & configuration.
 app.UseHttpsRedirection();
+app.UseDefaultFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
