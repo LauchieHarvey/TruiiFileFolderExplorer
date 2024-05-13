@@ -16,8 +16,21 @@ export const api = createApi({
     addFolder: builder.mutation<void, {parentId: number, name: string}>({
       query: (args) => ({url: '/folder', method: 'POST', body: args}),
       invalidatesTags: ["folders"],
+    }),
+    addFile: builder.mutation<void, {parentId: number, file: File}>({
+      query: (args) => {
+        const formData = new FormData();
+        formData.append('parentId', args.parentId.toString());
+        formData.append('file', args.file);
+        return {
+          url: '/file',
+          method: 'POST',
+          body: formData
+        };
+      },
+      invalidatesTags: ["folders"]
     })
   }),
 });
 
-export const { useGetFoldersQuery, useAddFolderMutation } = api;
+export const { useGetFoldersQuery, useAddFolderMutation, useAddFileMutation } = api;

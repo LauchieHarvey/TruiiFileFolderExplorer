@@ -90,7 +90,7 @@ public class FileController : ControllerBase
 
         if (!IsAllowedFileType(file))
         {
-          return BadRequest($"File type must be csv or geojson.");
+          return BadRequest($"File type must be csv or geojson. Instead got {file.ContentType}");
         }
 
 
@@ -102,7 +102,7 @@ public class FileController : ControllerBase
           {
             using ( var cmd = new NpgsqlCommand("INSERT INTO files (name, parentId, file) VALUES (@name, @parentId, @file)", connection))
             {
-              cmd.Parameters.AddWithValue("@name", file.Name);
+              cmd.Parameters.AddWithValue("@name", file.FileName);
               cmd.Parameters.AddWithValue("@parentId", parentId);
               cmd.Parameters.AddWithValue("@file", file.OpenReadStream());
 
@@ -124,8 +124,11 @@ public class FileController : ControllerBase
       // Define allowed Content-Types
       string[] allowedTypes = { "text/csv", "application/geo+json" };
 
+      // Since browser struggles to identify application/geojson, also check the file extensions.
+      bool correctExtension = file.FileName.EndsWith(".geojson", StringComparison.OrdinalIgnoreCase);
+
       // Check if the uploaded file type is in the allowed types
-      return allowedTypes.Contains(file.ContentType);
+      return allowedTypes.Contains(file.ContentType) || correctExtension;
     }
 
     public bool IsAllowedFileSize(IFormFile file)

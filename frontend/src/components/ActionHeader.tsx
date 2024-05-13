@@ -1,18 +1,24 @@
 import { useState } from "react";
 import { selectCurrentFolder } from "../state/folderSlice";
 import { useSelector } from "react-redux";
-import { useAddFolderMutation } from "../state/api";
+import { useAddFolderMutation, useAddFileMutation } from "../state/api";
 import { ClosedFolderIcon } from "./Icons";
 
 const ActionHeader = () => {
   const currentFolder = useSelector(selectCurrentFolder);
   const [folderName, setFolderName] = useState("");
   const [addFolder] = useAddFolderMutation();
+  const [addFile] = useAddFileMutation();
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length !== 1)
       return;
-    console.log("uploading file...", e.target.files[0]);
+    console.log(e.target.files[0]);
+    try {
+      addFile({parentId: currentFolder.id, file: e.target.files[0]});
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   const handleCreateFolder = async (e: React.FormEvent) => {
