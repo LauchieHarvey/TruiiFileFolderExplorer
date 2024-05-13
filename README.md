@@ -56,15 +56,35 @@ File uploads now work! That's all of the essential features done :)
 
 I'm considering adding leaflet to visualise the geojson.
 
+... time elapses ...
+
+I've implemented file "preview" for both csv and geojson. I'm wondering if I've misinterpreted the definition of preview though...  
+The previews I've made only show after you've uploaded the file and click on it in the folder view. It was probably intended to be a pre-upload sanity check for the file content. 
+
 ## Database Schema
 
 Folders: *id*, name, parentId  
-Files: *id*, name, parentId, fileData
+Files: *id*, name, parentId, file
+
+If you'd like to inspect the DB when the containers are running, visit [adminer](http://localhost:8001/?pgsql=db&username=truii&db=tfedb) and use password "truii".
 
 ## User Guide
 
+WARNING: The UI won't work yet, I am yet to add and push the frontend dist/ directory. I wouldn't normally do this but it'll save you a complicated dev environment set up.
+
+I have containerized this project using docker. The steps to get the project running are as follows:  
+1. Make sure docker is installed.
+2. git clone git@github.com:LauchieHarvey/TruiiFileFolderExplorer.git
+3. From the project root directory run: docker compose build
+4. docker compose up -d
+5. Wait ~5 seconds and then open the UI on http://localhost
+
 ### System Limitations
-Maximum filesize is 100MB.
+Maximum filesize is 100MB. I have not tested with a file that large. I don't expect it to work since the file content is loaded all at once in the browser for the preview features. Uploading it to the DB should work but I'd be surprised if the browser doesn't crash when previewing a 100MB file.  
+I have tested with all of the files provided with the project specification.  
 
 ## Future Development Plans
+
+First step would be to improve the developer environment. Making changes takes too long but with the project only lasting one week it wasn't worth fixing.  
+A lot of basic CRUD actions are missing on both files and folders. That is a definite area for improvement.
 
